@@ -4,7 +4,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Dragon {
+public class Dragon implements DrawableSimulable, Collisionable{
 	
 	private Point2D position;
 	
@@ -21,13 +21,13 @@ public class Dragon {
 		this.speed = speed;
 	}
 
-	
+	@Override
 	public void draw(GraphicsContext gc) {
 		Point2D canvasPosition = world.getCanvasPoint(position);
 		gc.drawImage(Constants.DRAGON_IMAGE, canvasPosition.getX(), canvasPosition.getY(), size, size);
 	}
 
-
+	@Override
 	public void simulate(double timeDelta) {
 		double timeDeltaS = timeDelta;
 		double newX = (position.getX() + speed.getX() * timeDeltaS + world.getWidth()) % world.getWidth(); 
@@ -43,6 +43,14 @@ public class Dragon {
 
 	public void hit() {
 		speed = speed.multiply(-1.);
+	}
+
+
+	@Override
+	public void hitBy(Collisionable other) {
+		if (!(other instanceof Dragon)) {
+			hit();
+		}
 	}
 
 	

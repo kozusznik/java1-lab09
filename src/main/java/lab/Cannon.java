@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 
-public class Cannon {
+public class Cannon implements DrawableSimulable {
 
 	private int direction=-1;
 	private double angle = 0;

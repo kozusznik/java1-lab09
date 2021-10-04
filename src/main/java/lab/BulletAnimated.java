@@ -5,7 +5,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class BulletAnimated {
+public class BulletAnimated  implements DrawableSimulable, Collisionable{
 
 	private Point2D position;
 	private Point2D start;
@@ -83,6 +83,10 @@ public class BulletAnimated {
 	
 	public boolean overlaps(Dragon dragon) {
 		return getBoundingBox().intersects(dragon.getBoundingBox());
+	}
+	
+	public void hitBy(Collisionable other) {
+		reload();
 	}
 	
 	public void reload() {

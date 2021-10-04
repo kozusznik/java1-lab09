@@ -7,17 +7,16 @@ import javafx.scene.canvas.GraphicsContext;
 public class World {
 	private double width;
 	private double height;
-	private BulletAnimated bulletAnimatted;
-	private Cannon cannon;
-	private Dragon[] dragons;
-
+	private DrawableSimulable []entities; 
+	
 	public World(double width, double height) {
 		super();
 		this.width = width;
 		this.height = height;
-		cannon = new Cannon(this, new Point2D(50, 50), new Point2D(100, 20));
-		bulletAnimatted = new BulletAnimated(this, cannon, new Point2D(30, 60), new Point2D(0, 0), 40);
-		dragons = new Dragon[] { new Dragon(this, new Point2D(50, 200), new Point2D(100, 5)),
+		Cannon cannon = new Cannon(this, new Point2D(50, 50), new Point2D(100, 20));
+		entities = new DrawableSimulable[] { cannon,
+				new BulletAnimated(this, cannon, new Point2D(30, 60), new Point2D(0, 0), 40),
+				new Dragon(this, new Point2D(50, 200), new Point2D(100, 5)),
 				new Dragon(this, new Point2D(50, 230), new Point2D(60, 5)),
 				new Dragon(this, new Point2D(50, 270), new Point2D(-50, 20)) };
 	}
@@ -29,23 +28,37 @@ public class World {
 	public void draw(Canvas canvas) {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		cannon.draw(gc);
-		bulletAnimatted.draw(gc);
-		for(Dragon dragon: dragons) {
-			dragon.draw(gc);
+		for(DrawableSimulable entity: entities) {
+			entity.draw(gc);
 		}
 	}
 
 	public void simulate(double timeDelta) {
-		bulletAnimatted.simulate(timeDelta);
+		for(DrawableSimulable entity: entities) {
+			entity.simulate(timeDelta);
+			if (entity instanceof Collisionable) {
+				Collisionable thisCollinsable = (Collisionable) entity;
+				for(DrawableSimulable entity2 : entities) {
+					if (entity != entity2 && entity2 instanceof Collisionable) {
+						Collisionable thatCollinsable = (Collisionable) entity2;
+						if (thisCollinsable.intersects(thatCollinsable)) {
+							thisCollinsable.hitBy(thatCollinsable);
+							thatCollinsable.hitBy(thisCollinsable);
+						}
+					}
+				}
+			}
+		}
+		/*bulletAnimatted.simulate(timeDelta);
 		cannon.simulate(timeDelta);
+		
 		for(Dragon dragon: dragons) {
 			if (bulletAnimatted.overlaps(dragon)) {
 				dragon.hit();
 				bulletAnimatted.reload();
 			}
 			dragon.simulate(timeDelta);
-		}
+		}*/
 	}
 
 	public double getWidth() {
