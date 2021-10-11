@@ -1,10 +1,15 @@
 package lab;
 
+import java.util.Random;
+
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 public class World {
+	
+	private final static int NUMBER_OF_DRAGONS = 5;
+	
 	private double width;
 	private double height;
 	private DrawableSimulable []entities; 
@@ -14,11 +19,18 @@ public class World {
 		this.width = width;
 		this.height = height;
 		Cannon cannon = new Cannon(this, new Point2D(50, 50), new Point2D(100, 20));
-		entities = new DrawableSimulable[] { cannon,
-				new BulletAnimated(this, cannon, new Point2D(30, 60), new Point2D(0, 0), 40),
-				new Dragon(this, new Point2D(50, 200), new Point2D(100, 5)),
-				new Dragon(this, new Point2D(50, 230), new Point2D(60, 5)),
-				new Dragon(this, new Point2D(50, 270), new Point2D(-50, 20)) };
+		entities = new DrawableSimulable[2 + NUMBER_OF_DRAGONS];
+		entities[0] = cannon;
+		entities[1] = new BulletAnimated(this, cannon, new Point2D(30, 60), new Point2D(0, 0), 40);
+		Random rnd = new Random();
+		
+		for (int i = 2; i < entities.length; i++) {
+			int x = rnd.nextInt((int) width);
+			int y = rnd.nextInt((int) height);
+			int vel_x = (rnd.nextInt(10) - 5) * 10;
+			int vel_y = (rnd.nextInt(10) - 5) * 10;
+			entities[i] = new Dragon(this, new Point2D(x, y), new Point2D(vel_x, vel_y));
+		}
 	}
 
 	public Point2D getCanvasPoint(Point2D worldPoint) {
