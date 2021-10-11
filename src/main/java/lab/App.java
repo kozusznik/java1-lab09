@@ -1,6 +1,5 @@
 package lab;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -19,39 +18,25 @@ public class App extends Application {
 	}
 	
 	private Canvas canvas;
-	private AnimationTimer animationTimer;
-	private Laboratory lab;
+	private GameController controller;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			//Construct a main window with a canvas.  
+			
+			
 			Group root = new Group();
-			canvas = new Canvas(800, 400);
+			canvas = new Canvas(800, 600);
 			root.getChildren().add(canvas);
-			Scene scene = new Scene(root, 800, 400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			Scene scene = new Scene(root);
+			
+			
 			primaryStage.setScene(scene);
 			primaryStage.resizableProperty().set(false);
-			primaryStage.setTitle("Java 1 - 3rd laboratory");
+			primaryStage.setTitle("Java 1 - 6th laboratory");
 			primaryStage.show();
-			
-			lab = new Laboratory(canvas);
-			
-			//Draw scene on a separate thread to avoid blocking UI.
-			animationTimer = new AnimationTimer() {
-				private Long previous;
-				
-				@Override
-				public void handle(long now) {
-					if (previous == null) {
-						previous = now;
-					} else {
-						drawScene((now - previous)/1e9);
-						previous = now;
-					}
-				}
-			};
-			animationTimer.start();
+			controller = new GameController(canvas);
+			controller.startGame();
 			//Exit program when main window is closed
 			primaryStage.setOnCloseRequest(this::exitProgram);
 		} catch (Exception e) {
@@ -59,17 +44,10 @@ public class App extends Application {
 		}
 	}
 	
-	/**
-	 * Draws objects into the canvas. Put you code here. 
-	 *
-	 *@return      nothing
-	 */
-	private void drawScene(double deltaT) {
-		lab.draw(deltaT);
-	}
+
 	
 	private void exitProgram(WindowEvent evt) {
-		animationTimer.stop();
+		controller.stopGame();
 		System.exit(0);
 	}
 }
