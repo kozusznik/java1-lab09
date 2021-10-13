@@ -1,9 +1,9 @@
 package lab;
 
 import javafx.application.Application;
-import javafx.scene.Group;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -17,17 +17,16 @@ public class App extends Application {
 		launch(args);
 	}
 	
-	private Canvas canvas;
 	private GameController controller;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			//Construct a main window with a canvas.  
 			
+			FXMLLoader loader = new FXMLLoader(this.getClass().getResource("GameView.fxml"));
 			
-			Group root = new Group();
-			canvas = new Canvas(800, 600);
-			root.getChildren().add(canvas);
+			BorderPane root = loader.load();
+			
 			Scene scene = new Scene(root);
 			
 			
@@ -35,7 +34,7 @@ public class App extends Application {
 			primaryStage.resizableProperty().set(false);
 			primaryStage.setTitle("Java 1 - 6th laboratory");
 			primaryStage.show();
-			controller = new GameController(canvas);
+			controller = loader.getController();
 			controller.startGame();
 			//Exit program when main window is closed
 			primaryStage.setOnCloseRequest(this::exitProgram);

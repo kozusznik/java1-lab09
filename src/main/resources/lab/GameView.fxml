@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.GameController">
+   <center>
+      <Canvas fx:id="canvas" height="400.0" width="600.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox alignment="CENTER" BorderPane.alignment="CENTER_LEFT">
+         <children>
+            <Slider fx:id="angleSlider" max="0.0" min="-90.0" showTickLabels="true" showTickMarks="true" value="-45.0" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#firePressed" text="Fire" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="11.0" left="14.0" right="11.0" top="12.0" />
+               </HBox.margin></Button>
+            <Slider HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

@@ -7,7 +7,6 @@ import javafx.scene.transform.Affine;
 
 public class Cannon implements DrawableSimulable {
 
-	private int direction=-1;
 	private double angle = 0;
 	private Point2D position;
 	private Point2D size;
@@ -24,10 +23,11 @@ public class Cannon implements DrawableSimulable {
 	}
 
 	public void simulate(double timeStep) {
-		angle = angle + direction*0.8;
+		/*angle = angle + direction*0.8;
 		if(angle <=-90 || angle >= 0) {
 			direction*=-1;
 		}
+		{*/
 	}
 	
 	public void draw(GraphicsContext gc) {
@@ -45,5 +45,9 @@ public class Cannon implements DrawableSimulable {
 
 	public double getAngle() {
 		return (angle * -1) / 180 * Math.PI;
+	}
+
+	public void setAngle(double doubleValue) {
+		angle = doubleValue;
 	}
 }

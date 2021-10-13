@@ -89,4 +89,14 @@ public class World {
 		this.height = height;
 	}
 
+	public void setCannonAngle(double doubleValue) {
+		for (DrawableSimulable d: entities) {
+			if (d instanceof Cannon) {
+				Cannon cannon = (Cannon) d;
+				cannon.setAngle(doubleValue);
+			}
+		}
+		
+	}
+
 }
