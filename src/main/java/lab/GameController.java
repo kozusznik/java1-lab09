@@ -1,9 +1,10 @@
-package lab;
+	package lab;
 
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 
 public class GameController {
@@ -14,7 +15,16 @@ public class GameController {
 	private Slider angleSlider;
 	
 	@FXML
+	private Slider strengthSlider;
+	
+	@FXML
 	private Canvas canvas;
+	
+	@FXML
+	private Label shoots;
+	
+	@FXML
+	private Label hits;
 	
 	private AnimationTimer animationTimer;
 	
@@ -39,6 +49,9 @@ public class GameController {
 		};
 		angleSlider.valueProperty().addListener(this::angleChanged);
 		world.setCannonAngle(angleSlider.getValue());
+		
+		strengthSlider.valueProperty().addListener(this::strenghtChanged);
+		world.setCannonStrength(strengthSlider.getValue());
 		animationTimer.start();
 	}
 
@@ -54,7 +67,7 @@ public class GameController {
 	
 	@FXML
 	private void firePressed() {
-		System.out.println("Fire");
+		world.fire();
 	}
 	
 	
@@ -63,5 +76,8 @@ public class GameController {
 		world.setCannonAngle(newValue.doubleValue());
 	}
 
-	
+	private void strenghtChanged(ObservableValue<? extends Number> observable
+			, Number oldValue, Number newValue) {
+		world.setCannonStrength(newValue.doubleValue());
+	}
 }

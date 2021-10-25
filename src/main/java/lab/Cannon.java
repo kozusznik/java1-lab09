@@ -8,9 +8,11 @@ import javafx.scene.transform.Affine;
 public class Cannon implements DrawableSimulable {
 
 	private double angle = 0;
+	private double strength = 50.;
 	private Point2D position;
 	private Point2D size;
 	private World world;
+	
 	
 	
 	 
@@ -50,4 +52,13 @@ public class Cannon implements DrawableSimulable {
 	public void setAngle(double doubleValue) {
 		angle = doubleValue;
 	}
+
+	public double getStrength() {
+		return strength;
+	}
+	
+	public void setStrength(double doubleValue) {
+		this.strength = doubleValue;
+	}
+	
 }

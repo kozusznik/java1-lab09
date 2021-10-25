@@ -8,10 +8,17 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class World {
 	
-	private final static int NUMBER_OF_DRAGONS = 5;
+	private final static int NUMBER_OF_DRAGONS = 2;
 	
 	private double width;
 	private double height;
+	
+	private GameListener gameListener = new EmptyGameListener();
+	
+	private int hits = 0;
+	
+	private int shoots = 0;
+	
 	private DrawableSimulable []entities; 
 	
 	public World(double width, double height) {
@@ -61,16 +68,6 @@ public class World {
 				}
 			}
 		}
-		/*bulletAnimatted.simulate(timeDelta);
-		cannon.simulate(timeDelta);
-		
-		for(Dragon dragon: dragons) {
-			if (bulletAnimatted.overlaps(dragon)) {
-				dragon.hit();
-				bulletAnimatted.reload();
-			}
-			dragon.simulate(timeDelta);
-		}*/
 	}
 
 	public double getWidth() {
@@ -97,6 +94,27 @@ public class World {
 			}
 		}
 		
+	}
+	
+	public void setCannonStrength(double doubleValue) {
+		for (DrawableSimulable d: entities) {
+			if (d instanceof Cannon) {
+				Cannon cannon = (Cannon) d;
+				cannon.setStrength(doubleValue);
+			}
+		}
+		
+	}
+
+	public void fire() {
+		for (DrawableSimulable e: entities) {
+			if (e instanceof BulletAnimated) {
+				BulletAnimated ba = (BulletAnimated) e;
+				ba.fire();
+				shoots++;
+				gameListener.stateChanged(shoots, hits);
+			}
+		}
 	}
 
 }

@@ -7,15 +7,16 @@ import javafx.scene.image.Image;
 
 public class BulletAnimated  implements DrawableSimulable, Collisionable{
 
+	private static final double STRENGTH_CANNON_COEFICIENT = 4.;
+	
 	private Point2D position;
 	private Point2D start;
 	private Point2D speed;
 	private Point2D initialSpeed;
 	private double size;
 	private double mass = 2;
-	private double strenghtOfCannon = 2;
 	private double cannonLength = 100;
-	private boolean accelerate = true;
+	private boolean accelerate = false;
 	private boolean hitToGround = false;
 
 	private double crossSectionalArea;
@@ -24,7 +25,10 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 	private Image image;
 	private World world;
 	private Cannon cannon;
+	private boolean fired;
 
+	private HitListener hitListener = new EmptyHitListener();
+	
 	public BulletAnimated(World world, Cannon cannon) {
 		this(world, cannon, new Point2D(0, 0), new Point2D(0, 0), 10);
 	}
@@ -32,7 +36,7 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 	public BulletAnimated(World world, Cannon cannon, Point2D start, Point2D speed, double size) {
 		this.start = start;
 		this.position = this.start;
-		this.initialSpeed = speed;
+		this.initialSpeed = Point2D.ZERO;
 		this.speed = speed;
 		this.size = size;
 		this.world = world;
@@ -49,9 +53,13 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 	}
 
 	public void simulate(double deltaT) {
+		if (!fired) {
+			return;
+		}
 		double timeStep = deltaT * 1000;
 		if (accelerate && start.distance(position) < cannonLength) {
 			double cannonAngle = cannon.getAngle(); 
+			double strenghtOfCannon = cannon.getStrength() * STRENGTH_CANNON_COEFICIENT/100.;
 			speed = speed
 					.add(new Point2D(Math.cos(cannonAngle) * strenghtOfCannon, Math.sin(cannonAngle) * strenghtOfCannon)
 							.multiply(1 / mass));
@@ -74,7 +82,6 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 			reload();
 		}
 		
-		
 	}
 
 	public Rectangle2D getBoundingBox() {
@@ -86,14 +93,25 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 	}
 	
 	public void hitBy(Collisionable other) {
+		hitListener.hit();
 		reload();
 	}
 	
 	public void reload() {
 		position = start;
-		speed = initialSpeed;
+		speed = Point2D.ZERO;
 		hitToGround = false;
+		accelerate = false;
+		fired = false;
+	}
+
+	public void fire() {
+		if (fired) {
+			return;
+		}
+		fired = true;
 		accelerate = true;
+		speed = initialSpeed;
 	}
 	
 }
