@@ -62,18 +62,19 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 			double strenghtOfCannon = cannon.getStrength() * STRENGTH_CANNON_COEFICIENT/100.;
 			speed = speed
 					.add(new Point2D(Math.cos(cannonAngle) * strenghtOfCannon, Math.sin(cannonAngle) * strenghtOfCannon)
-							.multiply(1 / mass));
+							.multiply(deltaT / mass));
 		} else if (!hitToGround) {
 			accelerate = false;
 			Point2D airResistanceforce = new Point2D(
 					-1. / 2 * crossSectionalArea * Constants.AIR_DENSITY * dragCoefficient * Math.pow(speed.getX(), 2),
 					-1. / 2 * crossSectionalArea * Constants.AIR_DENSITY * 0.47 * Math.pow(speed.getY(), 2));
 			Point2D acceleration = new Point2D(-airResistanceforce.getX() * mass,
-					(-Constants.GRAVITATIONAL_ACCELERATION + airResistanceforce.getY()) * mass);
-			speed = speed.add(acceleration.multiply(timeStep / 1000));
+					(-Constants.GRAVITATIONAL_ACCELERATION/30 + airResistanceforce.getY()) * mass);
+			speed = speed.add(acceleration.multiply(deltaT));
+			System.out.println("speed"+ speed);
 		}
 		if (!hitToGround) {
-			position = position.add(speed);
+			position = position.add(speed.multiply(deltaT*1000));
 			if (!accelerate && position.getY() <= size / 2) {
 				hitToGround = true;
 				position = new Point2D(position.getX(), size / 2);
