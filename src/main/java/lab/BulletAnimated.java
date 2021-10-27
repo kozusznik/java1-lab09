@@ -56,7 +56,6 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 		if (!fired) {
 			return;
 		}
-		double timeStep = deltaT * 1000;
 		if (accelerate && start.distance(position) < cannonLength) {
 			double cannonAngle = cannon.getAngle(); 
 			double strenghtOfCannon = cannon.getStrength() * STRENGTH_CANNON_COEFICIENT/100.;
@@ -71,7 +70,6 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 			Point2D acceleration = new Point2D(-airResistanceforce.getX() * mass,
 					(-Constants.GRAVITATIONAL_ACCELERATION/30 + airResistanceforce.getY()) * mass);
 			speed = speed.add(acceleration.multiply(deltaT));
-			System.out.println("speed"+ speed);
 		}
 		if (!hitToGround) {
 			position = position.add(speed.multiply(deltaT*1000));
