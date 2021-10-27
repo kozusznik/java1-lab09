@@ -4,7 +4,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-
 public class BulletAnimated  implements DrawableSimulable, Collisionable{
 
 	private static final double STRENGTH_CANNON_COEFICIENT = 4.;
@@ -56,7 +55,6 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 		if (!fired) {
 			return;
 		}
-		double timeStep = deltaT * 1000;
 		if (accelerate && start.distance(position) < cannonLength) {
 			double cannonAngle = cannon.getAngle(); 
 			double strenghtOfCannon = cannon.getStrength() * STRENGTH_CANNON_COEFICIENT/100.;
@@ -69,7 +67,7 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 					-1. / 2 * crossSectionalArea * Constants.AIR_DENSITY * dragCoefficient * Math.pow(speed.getX(), 2),
 					-1. / 2 * crossSectionalArea * Constants.AIR_DENSITY * 0.47 * Math.pow(speed.getY(), 2));
 			Point2D acceleration = new Point2D(-airResistanceforce.getX() * mass,
-					(-Constants.GRAVITATIONAL_ACCELERATION/30 + airResistanceforce.getY()) * mass);
+					(-Constants.GRAVITATIONAL_ACCELERATION/20 + airResistanceforce.getY()) * mass);
 			speed = speed.add(acceleration.multiply(deltaT));
 			System.out.println("speed"+ speed);
 		}
@@ -113,6 +111,10 @@ public class BulletAnimated  implements DrawableSimulable, Collisionable{
 		fired = true;
 		accelerate = true;
 		speed = initialSpeed;
+	}
+
+	public void setHitListener(HitListener hitListenerImpl) {
+		hitListener = hitListenerImpl;
 	}
 	
 }
