@@ -29,6 +29,7 @@ public class World {
 		entities = new DrawableSimulable[2 + NUMBER_OF_DRAGONS];
 		entities[0] = cannon;
 		entities[1] = new BulletAnimated(this, cannon, new Point2D(30, 60), new Point2D(0, 0), 40);
+		((BulletAnimated)entities[1]).setHitListener(this::hitOfBullet);
 		Random rnd = new Random();
 		
 		for (int i = 2; i < entities.length; i++) {
@@ -113,8 +114,21 @@ public class World {
 				ba.fire();
 				shoots++;
 				gameListener.stateChanged(shoots, hits);
+				if (shoots > 10) {
+					gameListener.gameOver();
+				}
 			}
 		}
 	}
 
+	public void setGameListener(GameListener gameListenerImpl) {
+		this.gameListener = gameListenerImpl;
+		
+	}
+	
+	private void hitOfBullet() {
+		hits++;
+		gameListener.stateChanged(shoots, hits);
+	}
+	
 }

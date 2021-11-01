@@ -32,21 +32,10 @@ public class GameController {
 	}
 	
 	public void startGame() {
-		this.world = new World(canvas.getWidth(), canvas.getHeight());	
+		this.world = new World(canvas.getWidth(), canvas.getHeight());
+		this.world.setGameListener(new GameListenerImpl());
 		//Draw scene on a separate thread to avoid blocking UI.
-		animationTimer = new AnimationTimer() {
-			private Long previous;
-			
-			@Override
-			public void handle(long now) {
-				if (previous == null) {
-					previous = now;
-				} else {
-					drawScene((now - previous)/1e9);
-					previous = now;
-				}
-			}
-		};
+		animationTimer = new AnimationTimerImpl();
 		angleSlider.valueProperty().addListener(this::angleChanged);
 		world.setCannonAngle(angleSlider.getValue());
 		
@@ -79,5 +68,34 @@ public class GameController {
 	private void strenghtChanged(ObservableValue<? extends Number> observable
 			, Number oldValue, Number newValue) {
 		world.setCannonStrength(newValue.doubleValue());
+	}
+	
+	private final class AnimationTimerImpl extends AnimationTimer {
+		private Long previous;
+
+		@Override
+		public void handle(long now) {
+			if (previous == null) {
+				previous = now;
+			} else {
+				drawScene((now - previous)/1e9);
+				previous = now;
+			}
+		}
+	}
+
+	private class GameListenerImpl implements GameListener {
+
+		@Override
+		public void stateChanged(int shoots, int hits) {
+			GameController.this.shoots.setText("" + shoots);
+			GameController.this.hits.setText("" + hits);
+		}
+
+		@Override
+		public void gameOver() {
+			stopGame();
+		}
+		
 	}
 }
